@@ -29,7 +29,7 @@ Provides keydown events to restrict user from using certain characters
 6. characters
 
 ## VFOC
-Provides focusout events to flag inputs that require rules 
+Provides focusout events to flag inputs that require rules. If a rule is failed the class "error" is added to element.
 ### Options
 1. number
 2. integer
@@ -51,5 +51,8 @@ Allows you to set a string to be added to the prefix of inputing data.
 
 ## VSUF
 Allows you to set a string to be added to the suffix of inputing data. 
+
+## $valid.submit(form);
+Pass in the form, and it checks for any errors. If no errors exist it submits the form for you. 
 
 
