@@ -92,7 +92,6 @@ var $valid = {
 			if(vkey=='decimal') {
 				if($(el).val().indexOf('.')>-1 && key==190) return false;
 			}
-			$('.message').html($('.message').html()+','+key)
 			if((e.ctrlKey==false) && (e.altKey==false)) {
 				if($(el).attr('vdmax')) {
 					if($(el).val().indexOf('.')>-1) {
