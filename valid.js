@@ -1,6 +1,6 @@
 ////////////////////////////////////////////
 //                                        //
-//             Validate v1.0              //
+//             Validate v1.1              //
 //            by Albert Kiteck            //
 //           www.paxagency.com            //
 //          Copyright PAXagency           //
@@ -9,8 +9,8 @@
 
 var $valid = {
 	el:$('body'),
-	reg: {
-		rule:/^(.+?)\[(.+)\]$/,
+    reg: {
+        rule:/^(.+?)\[(.+)\]$/,
 		number:/^[0-9]+$/,
 		integer:/^\d+(\.\d{1,2})?$/,
 		decimal:/^\-?[0-9]*\.?[0-9]+$/,
@@ -34,61 +34,56 @@ var $valid = {
 		integer:[8,9,13,17,18,37,38,39,40,49,50,51,52,53,54,55,56,57,91,224],
 		decimal:[8,9,13,17,18,37,38,39,40,48,49,50,51,52,53,54,55,56,57,188,190,91,224],
 		characters:[8,9,13,16,17,18,37,38,39,40,48,49,50,51,52,53,54,55,56,57,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,85,86,87,88,89,90,91,189,224],
-		file:[8,9,13,17,18,37,38,39,40,48,49,50,51,52,53,54,55,56,57,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,85,86,87,88,89,90,91,189,190,224]
+		file:[8,9,13,17,18,37,38,39,40,48,49,50,51,52,53,54,55,56,57,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,85,86,87,88,89,90,91,189,190,224],
+		numbers:[48,49,50,51,52,53,54,55,56,57]
 	},
-  init: function() {
+    init: function() {
 		$valid.el = $('body');
-		$valid.set();
-  },
-  set: function () {
+		$valid.set();	
+    },
+    set: function () {
 	  	$($valid.el).find('input[type="text"]').each(function() {
-				if(!$._data($(this)[0]).events) {
-					if($(this).attr('vkey')) $valid.addKey($(this));
-					if($(this).attr('vsuf')) $valid.addSuffix($(this));
-					if($(this).attr('vpre')) $valid.addPrefix($(this));
-					if($(this).attr('vfoc')) $valid.addFocus($(this));
-				}
-			});
+				if($(this).attr('vkey')) $valid.addKey($(this));
+				if($(this).attr('vsuf')) $valid.addSuffix($(this));
+				if($(this).attr('vpre')) $valid.addPrefix($(this));
+				if($(this).attr('vfoc')) $valid.addFocus($(this));
+		});
 	},
 	update: function (el) {
 	  	$($valid.el).find('input[type="text"]').each(function() {
-				if(!$._data($(this)[0]).events) {
-						if($(this).attr('vkey')) $valid.addKey($(this));
-						if($(this).attr('vsuf')) $valid.addSuffix($(this));
-						if($(this).attr('vpre')) $valid.addPrefix($(this));
-						if($(this).attr('vfoc')) $valid.addFocus($(this));
-				}
-			});
+				if($(this).attr('vkey')) $valid.addKey($(this));
+				if($(this).attr('vsuf')) $valid.addSuffix($(this));
+				if($(this).attr('vpre')) $valid.addPrefix($(this));
+				if($(this).attr('vfoc')) $valid.addFocus($(this));
+		});
 	},
-  addSuffix: function(el) {
-  		$(el).parent().append("<span style='display:none; max-width:200px; max-height:25px; position:absolute;top:30px; z-index:0; left:0; color:#91a4b2;  padding:0;text-indent:4px;' onclick='$(this).parent().find(\"input\").focus()'>"+$(el).attr('vsuf')+"</span>");
+    addSuffix: function(el) {
+  		$(el).parent().append("<span class='span-valid-fix' style='display:none; max-width:200px; max-height:25px; position:absolute;top:30px; z-index:0; left:0; color:#91a4b2;  padding:0;text-indent:4px;' onclick='$(this).parent().find(\"input\").focus()'>"+$(el).attr('vsuf')+"</span>");
 		$(el).on("input focus blur",function(e) {
-				var width = $valid.textWidth($(el).val());
-				$(el).parent().find('span').css('margin-left',width+'px');
-				(width) ? $(el).parent().find('span').show() : $(el).parent().find('span').hide();
+			var width = $valid.textWidth($(el).val());
+			$(el).parent().find('span.span-valid-fix').css('margin-left',width+'px');
+			(width) ? $(el).parent().find('span.span-valid-fix').show() : $(el).parent().find('span.span-valid-fix').hide();
 		})
 		$(el).trigger("input");
-  },
-  addPrefix: function(el) {
-		$(el).parent().append("<span style='position:absolute;top:30px; left:7px;color:#91a4b2;' class='span-valid-prefix'>"+$(el).attr('vpre')+"</span>");
-		var width = $(el).parent().find('span.span-valid-prefix').width()+12;
+    },
+    addPrefix: function(el) {
+		$(el).parent().append("<span style='position:absolute;top:30px; left:7px;color:#91a4b2;' class='span-valid-fix'>"+$(el).attr('vpre')+"</span>");
+		var width = $(el).parent().find('span.span-valid-fix').width()+12;
 		$(el).css('padding-left',width+'px');
-  },
-  addFocus: function(el) {
-  	$(el).on('focusout',function(e){
-		
-		var vl = $(this).val();
-		var error = false;
-		if($(this).attr('vfoc')=='required' && vl!='') return  $(this).removeClass('error');
-		if(vl=='') return $(this).removeClass('error');
-		if(!$valid.reg[$(this).attr('vfoc')].test(vl)) error = true;
-		//var obj = $(this).parent().parent();
-		(error) ? $(this).addClass('error') : $(this).removeClass('error');
-	});
-  },
-  addKey: function(el) {
+    },
+    addFocus: function(el) {
+        $(el).on('focusout',function(e){
+            var vl = $(this).val();
+            var error = false;
+            if($(this).attr('vfoc')=='required' && vl!='') return  $(this).removeClass('error');
+            if(vl=='') return $(this).removeClass('error');
+            if(!$valid.reg[$(this).attr('vfoc')].test(vl)) error = true;
+            (error) ? $(this).addClass('error') : $(this).removeClass('error');
+        });
+    },
+    addKey: function(el) {
   		$(el).on("keydown",function(e) {
-			if(!$(this).attr("vkey")) return;
+		    if(!$(this).attr("vkey")) return;
 			var key = e.keyCode ? e.keyCode : e.which;
 			if($(this).attr('vkey')=='decimal') {
 				if($(el).val().indexOf('.')>-1 && key==190) return false;
@@ -107,8 +102,8 @@ var $valid = {
 				return true;
 			}
 		});
-  },
-  submit: function(form) {
+    },
+    submit: function(form) {
   		var success = true;
   		$(form).find('input').each(function() {
   		  if(!$(this).attr('vfoc')) $(this).removeClass('error');
@@ -119,18 +114,17 @@ var $valid = {
 			 	}
 		});
 		return (success) ? $(form).submit() : alert('Please fill-in all required fields correctly.');
-  },
-  textWidth: function(text){
-		  if(text.length != 0) {
-		  var html = $('<span style="font-size:21px; font-family:arial; postion:absolute;width:auto;left:-9999px">' + text+ '</span>');
-
-		  $('body').append(html);
-		  var width = html.width();
-		  html.remove();
-		  return width+10;
-	  } else {
-	  	return false;
-	  }
+    },
+    textWidth: function(text){
+		if(text.length != 0) {
+		    var html = $('<span class="span-valid-fix"  style="font-size:21px; font-family:arial; postion:absolute;width:auto;left:-9999px">' + text+ '</span>');
+		    $('body').append(html);
+		    var width = html.width();
+		    html.remove();
+		    return width+10;
+	    } else {
+	  	    return false;
+	    }
 	}
 }
 $($valid.init);
