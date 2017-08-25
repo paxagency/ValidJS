@@ -35,7 +35,9 @@ var $valid = {
 		decimal:[8,9,13,17,18,37,38,39,40,48,49,50,51,52,53,54,55,56,57,188,190,91,224],
 		characters:[8,9,13,16,17,18,37,38,39,40,48,49,50,51,52,53,54,55,56,57,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,85,86,87,88,89,90,91,189,224],
 		file:[8,9,13,17,18,37,38,39,40,48,49,50,51,52,53,54,55,56,57,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,85,86,87,88,89,90,91,189,190,224],
-		numbers:[48,49,50,51,52,53,54,55,56,57]
+		numbers:[48,49,50,51,52,53,54,55,56,57],
+		onlycharacters:[81,87,69,82,84,89,85,73,79,80,65,83,68,70,71,72,74,75,76,90,88,67,86,66,78,77],
+	    alphaNumeric:[49,50,51,52,53,54,55,56,57,48,81,87,69,82,84,89,85,73,79,80,65,83,68,70,71,72,74,75,76,90,88,67,86,66,78,77]
 	},
     init: function() {
 		$valid.el = $('body');
@@ -84,10 +86,13 @@ var $valid = {
     addKey: function(el) {
   		$(el).on("keydown",function(e) {
 		    if(!$(this).attr("vkey")) return;
+		    var vkey = $(this).attr("vkey");
 			var key = e.keyCode ? e.keyCode : e.which;
-			if($(this).attr('vkey')=='decimal') {
+			if(key==8) return true;
+			if(vkey=='decimal') {
 				if($(el).val().indexOf('.')>-1 && key==190) return false;
 			}
+			$('.message').html($('.message').html()+','+key)
 			if((e.ctrlKey==false) && (e.altKey==false)) {
 				if($(el).attr('vdmax')) {
 					if($(el).val().indexOf('.')>-1) {
@@ -96,7 +101,8 @@ var $valid = {
 						if(dec>1 && $valid.cha['numbers'].indexOf(key)!=-1) return false;
 					}
 				}
-				return ($valid.cha[$(this).attr('vkey')].indexOf(key)!=-1) ? true : false;
+				if(vkey=='alphaNumeric' && e.shiftKey) return false; 
+				return ($valid.cha[vkey].indexOf(key)!=-1) ? true : false;
 			} else {
 				if(e.shiftKey || e.altKey) return false;
 				return true;
